@@ -14,7 +14,7 @@ import java.util.List;
 @Dao
 public interface MoviesDao {
     @Query("SELECT * FROM Movies")
-    List<Movies> getAll();
+    LiveData<List<Movies>> getAll();
 
     @Insert
     void insert(Movies movies);

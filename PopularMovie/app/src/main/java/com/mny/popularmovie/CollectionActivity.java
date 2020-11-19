@@ -1,6 +1,10 @@
 package com.mny.popularmovie;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -10,6 +14,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.mny.popularmovie.bean.Movies;
+import com.mny.popularmovie.model.MovieViewModel;
 import com.mny.popularmovie.room.FavoriteDatabase;
 import com.mny.popularmovie.utls.RlvItemClickListener;
 
@@ -20,6 +25,7 @@ public class CollectionActivity extends BaseActivity {
     private RecyclerView rlv;
     List<Movies> list = new ArrayList<>();
     private MvAdapter mvAdapter;
+    private MovieViewModel viewModel;
 
     public static void start(Context context) {
         Intent starter = new Intent(context, CollectionActivity.class);
@@ -35,20 +41,25 @@ public class CollectionActivity extends BaseActivity {
         rlv = findViewById(R.id.rlv_collection);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         rlv.setLayoutManager(gridLayoutManager);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        list.clear();
-        list.addAll(FavoriteDatabase.getInstance().userDao().getAll());
-        mvAdapter = new MvAdapter(list, CollectionActivity.this, new RlvItemClickListener() {
+        mvAdapter = new MvAdapter(CollectionActivity.this, new RlvItemClickListener() {
             @Override
             public void onItemClickListener(Movies movies) {
                 DetialActivity.start(CollectionActivity.this, movies);
             }
         });
         rlv.setAdapter(mvAdapter);
+        viewModel = new ViewModelProvider(this).get(MovieViewModel.class);
+        viewModel.getMovieLiveData().observe(this, new Observer<List<Movies>>() {
+            @Override
+            public void onChanged(List<Movies> movies) {
+                mvAdapter.addData(movies);
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override

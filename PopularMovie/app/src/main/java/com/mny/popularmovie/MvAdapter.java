@@ -12,23 +12,23 @@ import com.mny.popularmovie.bean.Movies;
 import com.mny.popularmovie.utls.DeviceUtils;
 import com.mny.popularmovie.utls.RlvItemClickListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MvAdapter extends RecyclerView.Adapter<MvAdapter.MvHolder> {
-    private List<Movies> list;
+    private List<Movies> list = new ArrayList<>();
     private Activity context;
     private RlvItemClickListener listener;
     private int itemWidth;
     private int itemHeight;
 
-    public MvAdapter(List<Movies> list, Activity context, RlvItemClickListener listener) {
-        this.list = list;
+    public MvAdapter(Activity context, RlvItemClickListener listener) {
         this.context = context;
         this.listener = listener;
-        itemWidth = DeviceUtils.getScreenWidth(context)/2;
+        itemWidth = DeviceUtils.getScreenWidth(context) / 2;
         float f = 185f / 278f;
         itemHeight = (int) (itemWidth / f);
     }
@@ -69,5 +69,11 @@ public class MvAdapter extends RecyclerView.Adapter<MvAdapter.MvHolder> {
             params.height = itemHeight;
             iv.setLayoutParams(params);
         }
+    }
+
+    public void addData(List<Movies> data) {
+        this.list.clear();
+        this.list.addAll(data);
+        this.notifyDataSetChanged();
     }
 }

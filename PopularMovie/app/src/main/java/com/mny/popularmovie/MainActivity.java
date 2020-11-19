@@ -26,7 +26,6 @@ public class MainActivity extends BaseActivity {
     private final int LOADINGOVER = 1001;
     private RecyclerView rlv;
     private MvAdapter mvAdapter;
-    private List<Movies> list = new ArrayList<>();
     Handler handler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -36,8 +35,7 @@ public class MainActivity extends BaseActivity {
                     String m = (String) msg.obj;
                     if (!TextUtils.isEmpty(m)) {
                         List<Movies> mlist = MovieJsonUtils.getMovies(m);
-                        list.clear();
-                        list.addAll(mlist);
+                        mvAdapter.addData(mlist);
                         mvAdapter.notifyDataSetChanged();
                     } else {
                         Toast.makeText(MainActivity.this, "movie is null", Toast.LENGTH_SHORT).show();
@@ -56,7 +54,7 @@ public class MainActivity extends BaseActivity {
         rlv = findViewById(R.id.rlv);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         rlv.setLayoutManager(gridLayoutManager);
-        mvAdapter = new MvAdapter(list, MainActivity.this, new RlvItemClickListener() {
+        mvAdapter = new MvAdapter(MainActivity.this, new RlvItemClickListener() {
             @Override
             public void onItemClickListener(Movies movies) {
                 DetialActivity.start(MainActivity.this, movies);
