@@ -1,7 +1,6 @@
 package com.mny.popularmovie;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,9 +10,8 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.mny.popularmovie.bean.Movies;
-import com.mny.popularmovie.utls.MovieJsonUtils;
+import com.mny.popularmovie.room.FavoriteDatabase;
 import com.mny.popularmovie.utls.RlvItemClickListener;
-import com.mny.popularmovie.utls.SpUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +23,6 @@ public class CollectionActivity extends BaseActivity {
 
     public static void start(Context context) {
         Intent starter = new Intent(context, CollectionActivity.class);
-//        starter.putExtra();
         context.startActivity(starter);
     }
 
@@ -44,10 +41,7 @@ public class CollectionActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         list.clear();
-        String[] s = SpUtils.getString(this, DetialActivity.KEYS, "").split("\\|");
-        for (int i = 0; i < s.length; i++) {
-            list.add(MovieJsonUtils.getMovie(s[i]));
-        }
+        list.addAll(FavoriteDatabase.getInstance().userDao().getAll());
         mvAdapter = new MvAdapter(list, CollectionActivity.this, new RlvItemClickListener() {
             @Override
             public void onItemClickListener(Movies movies) {

@@ -6,9 +6,23 @@ public class Config {
     public static final String HTTP_POPULAR = "http://api.themoviedb.org/3/movie/popular?api_key=" + API_KEY;
     public static final String HTTP_TOP = "http://api.themoviedb.org/3/movie/top_rated?api_key=" + API_KEY;
     public static final String BASE_IMG = "http://image.tmdb.org/t/p/w185/";
-    public static final String MOVIE_VIDEO = "http://api.themoviedb.org/movie/";
+    public static final String HTTP_MOVIES = "http://api.themoviedb.org/3/movie/";
+    public static final String HTTP_VIDEO_BASE = "/videos?api_key=" + API_KEY;
+    public static final String HTTP_REVIEWS = "http://api.themoviedb.org/3/movie/";
+    public static final String HTTP_REVIEWS_BASE = "/reviews?api_key=" + API_KEY;
+    public static final String HTTP_PLAY_VIDEO = "https://www.youtube.com/watch?v=";
 
-    public static final String getVideosUrl(String movieID) {
-        return MOVIE_VIDEO + movieID + "/videos";
+
+
+    public static String getVideoUrl(String id) {
+        return HTTP_MOVIES + id + HTTP_VIDEO_BASE;
+    }
+
+    public static String getReviewUrl(String id) {
+        return HTTP_REVIEWS + id + HTTP_REVIEWS_BASE;
+    }
+
+    public static String getPlayVideo(String key) {
+        return HTTP_PLAY_VIDEO + key;
     }
 }

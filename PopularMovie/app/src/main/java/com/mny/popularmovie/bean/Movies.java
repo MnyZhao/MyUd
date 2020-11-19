@@ -3,9 +3,15 @@ package com.mny.popularmovie.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class Movies implements Parcelable {
 
     /**
@@ -24,21 +30,44 @@ public class Movies implements Parcelable {
      * overview : A lowly utility worker is called to the future by a mysterious radio signal, he must leave his dying wife to embark on a journey that will force him to face his deepest fears in an attempt to change the fabric of reality and save humankind from its greatest environmental crisis yet.
      * release_date : 2020-10-01
      */
-
+    @PrimaryKey(autoGenerate = true)
+    public int key;
+    @Ignore
     public String popularity;
+    @Ignore
     public int vote_count;
+    @Ignore
     public boolean video;
+    @ColumnInfo(name = "poster_path")
     public String poster_path;
+    @ColumnInfo(name = "ids")
     public String id;
+    @Ignore
     public boolean adult;
+    @Ignore
     public String backdrop_path;
+    @Ignore
     public String original_language;
+    @Ignore
     public String original_title;
+    @ColumnInfo(name = "title")
     public String title;
+    @ColumnInfo(name = "vote_average")
     public double vote_average;
+    @ColumnInfo(name = "overview")
     public String overview;
+    @ColumnInfo(name = "release_date")
     public String release_date;
+    @Ignore
     public List<Integer> genre_ids;
+
+    public int getKey() {
+        return key;
+    }
+
+    public void setKey(int key) {
+        this.key = key;
+    }
 
     public String getPopularity() {
         return popularity;
@@ -152,6 +181,10 @@ public class Movies implements Parcelable {
         this.genre_ids = genre_ids;
     }
 
+    public static Creator<Movies> getCREATOR() {
+        return CREATOR;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -159,6 +192,7 @@ public class Movies implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.key);
         dest.writeString(this.popularity);
         dest.writeInt(this.vote_count);
         dest.writeByte(this.video ? (byte) 1 : (byte) 0);
@@ -179,6 +213,7 @@ public class Movies implements Parcelable {
     }
 
     protected Movies(Parcel in) {
+        this.key = in.readInt();
         this.popularity = in.readString();
         this.vote_count = in.readInt();
         this.video = in.readByte() != 0;
@@ -196,7 +231,7 @@ public class Movies implements Parcelable {
         in.readList(this.genre_ids, Integer.class.getClassLoader());
     }
 
-    public static final Parcelable.Creator<Movies> CREATOR = new Parcelable.Creator<Movies>() {
+    public static final Creator<Movies> CREATOR = new Creator<Movies>() {
         @Override
         public Movies createFromParcel(Parcel source) {
             return new Movies(source);
@@ -207,5 +242,4 @@ public class Movies implements Parcelable {
             return new Movies[size];
         }
     };
-
 }

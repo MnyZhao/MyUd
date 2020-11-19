@@ -1,6 +1,8 @@
 package com.mny.popularmovie.utls;
 
 import com.mny.popularmovie.bean.Movies;
+import com.mny.popularmovie.bean.MoviesReviews;
+import com.mny.popularmovie.bean.MoviesViedo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -79,5 +81,71 @@ public class MovieJsonUtils {
             e.printStackTrace();
         }
         return mv;
+    }
+    /**
+     * 获取预告片
+     *
+     * @param video
+     * @return
+     */
+    public static MoviesViedo getVideo(String video) {
+        MoviesViedo moviesViedo = new MoviesViedo();
+        try {
+            JSONObject object = new JSONObject(video);
+            moviesViedo.setId(object.getInt("id"));
+
+            JSONArray array = object.getJSONArray("results");
+            List<MoviesViedo.ResultsBean> list = new ArrayList<>();
+            for (int i = 0; i < array.length(); i++) {
+                MoviesViedo.ResultsBean resultsBean = new MoviesViedo.ResultsBean();
+                JSONObject oj = array.getJSONObject(i);
+                resultsBean.setId(oj.getString("id"));
+                resultsBean.setIso_639_1(oj.getString("iso_639_1"));
+                resultsBean.setIso_3166_1(oj.getString("iso_3166_1"));
+                resultsBean.setKey(oj.getString("key"));
+                resultsBean.setName(oj.getString("name"));
+                resultsBean.setSite(oj.getString("site"));
+                resultsBean.setSize(oj.getInt("size"));
+                resultsBean.setType(oj.getString("type"));
+                list.add(resultsBean);
+            }
+            moviesViedo.setResults(list);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return moviesViedo;
+    }
+
+    /**
+     * 获取评论
+     *
+     * @param reviews
+     * @return
+     */
+    public static MoviesReviews getReviews(String reviews) {
+        MoviesReviews re = new MoviesReviews();
+        try {
+            JSONObject object = new JSONObject(reviews);
+            re.setId(object.getInt("id"));
+            re.setPage(object.getInt("page"));
+            re.setTotal_pages(object.getInt("total_pages"));
+            re.setTotal_results(object.getInt("total_results"));
+
+            JSONArray array = object.getJSONArray("results");
+            List<MoviesReviews.ResultsBean> list = new ArrayList<>();
+            for (int i = 0; i < array.length(); i++) {
+                MoviesReviews.ResultsBean resultsBean = new MoviesReviews.ResultsBean();
+                JSONObject oj = array.getJSONObject(i);
+                resultsBean.setId(oj.getString("id"));
+                resultsBean.setAuthor(oj.getString("author"));
+                resultsBean.setContent(oj.getString("content"));
+                resultsBean.setUrl(oj.getString("url"));
+                list.add(resultsBean);
+            }
+            re.setResults(list);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return re;
     }
 }

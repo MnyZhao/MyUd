@@ -14,11 +14,10 @@ public class JavaHttpUrl {
             URL s = new URL(url);
             HttpURLConnection connection = (HttpURLConnection) s.openConnection();
             connection.setRequestMethod("GET");
-            if (connection.getResponseCode() != 200) {
-                return null;
+            if (connection.getResponseCode() == 200) {
+                is = connection.getInputStream();
+                return getToString(is);
             }
-            is = connection.getInputStream();
-            return getToString(is);
         } catch (IOException e) {
             e.printStackTrace();
         }
