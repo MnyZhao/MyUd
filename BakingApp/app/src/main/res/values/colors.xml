@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#ffc77d</color>
+    <color name="colorPrimaryDark">#ffddb0</color>
+    <color name="colorAccent">#FFE57F</color>
+    <color name="tv_bg">#FFF3E0</color>
+</resources>
